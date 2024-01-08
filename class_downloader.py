@@ -3,7 +3,7 @@ import os, shutil
 class constantes():
 
     def __init__(self):
-        self.rota_planilha = rota_planilha = r"C:\Users\artur\OneDrive\Área de Trabalho\Codes\PythonCodes\GRU_bot\gru_bot_downloader\input_downloader\input.xlsx" # <-- define a rota da planilha
+        self.rota_planilha = r"C:\Users\artur\OneDrive\Área de Trabalho\Codes\PythonCodes\GRU_bot\gru_bot_downloader\input_downloader\input.xlsx" # <-- define a rota da planilha
         self.rota_validador = r'C:\Users\artur\OneDrive\Área de Trabalho\Codes\PythonCodes\GRU_bot\gru_bot_downloader\download_validator'
         self.rota_coletor = r'C:\Users\artur\OneDrive\Área de Trabalho\Codes\PythonCodes\GRU_bot\gru_bot_downloader\coletor_gru_downloader'
         self.rota_gru_log = r'C:\Users\artur\OneDrive\Área de Trabalho\Codes\PythonCodes\GRU_bot\gru_bot_downloader\log_status_download'
