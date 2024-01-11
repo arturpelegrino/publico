@@ -1,0 +1,51 @@
+from openpyxl import load_workbook
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
+
+chrome = webdriver.Chrome()
+
+chrome.get('https://www.facebook.com/?locale=pt_BR')
+
+# email = chrome.find_element(by=By.ID, value='email')
+# email.send_keys(Keys.TAB * 1, '123')
+
+
+
+time.sleep(5)
+
+# rota_planilha = r'C:/Users/artur/OneDrive/Área de Trabalho/Codes/PythonCodes/conv_ass/template_conv.xlsx'
+
+# wb = load_workbook(filename=rota_planilha)
+
+# ws = wb['conv']
+
+# linhas = len([linha for linha in ws if not all([celula.value == None for celula in linha])])
+
+# qtd_lote = 10
+
+# resto = (linhas - 1)%qtd_lote
+
+# lotes = (linhas - 1)//qtd_lote + (resto > 0)
+
+# pos_linha = 2
+
+# for lote in range(1, lotes + 1):
+    
+#     if lote == lotes and resto > 0:
+#         for i in range(resto):
+#             status_lote = ws.cell(row=pos_linha, column=2)
+#             status_lote.value = f'lote {lote}'
+#             pos_linha += 1
+#     else:
+#         for i in range(qtd_lote):
+#             status_lote = ws.cell(row=pos_linha, column=2)
+#             status_lote.value = f'lote {lote}'
+#             pos_linha += 1
+
+# wb.save(filename=rota_planilha)
+
+
+
+
