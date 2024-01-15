@@ -1,50 +1,86 @@
-from openpyxl import load_workbook
+# ---------------------- imports ------------------------
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-import time
+import time, sys
+from class_conv import constants, functions
 
+# --------------- constants & functions -------------------
+c = constants()
+f = functions()
+
+# -------------------- setup lotes -----------------------
+qtd_lote = 20
+resto = (c.linhas - 1)%qtd_lote
+lotes = (c.linhas - 1)//qtd_lote + (resto > 0)
+pos_linha = 2
+
+# -------------------- webdriver ---------------------
 chrome = webdriver.Chrome()
-
-chrome.get('https://www.facebook.com/?locale=pt_BR')
-
-# email = chrome.find_element(by=By.ID, value='email')
-# email.send_keys(Keys.TAB * 1, '123')
-
-
-
 time.sleep(5)
+# --------------------- execução ------------------------
 
-# rota_planilha = r'C:/Users/artur/OneDrive/Área de Trabalho/Codes/PythonCodes/conv_ass/template_conv.xlsx'
+for lote in range(1, lotes + 1):
 
-# wb = load_workbook(filename=rota_planilha)
+    f.carregar_link(chrome, c.rota_portal_conv)
 
-# ws = wb['conv']
+    f.verificar_login()
 
-# linhas = len([linha for linha in ws if not all([celula.value == None for celula in linha])])
+    f.carregar_link(chrome, c.rota_conv_ass)
 
-# qtd_lote = 10
+    time.sleep(3)
 
-# resto = (linhas - 1)%qtd_lote
+    f.escrever(chrome, c.nome_AGO_xpath, c.nome_AGO.value)
+    f.escrever(chrome, c.fy_boot_xpath, c.fy_boot.value)
 
-# lotes = (linhas - 1)//qtd_lote + (resto > 0)
+    time.sleep(3)
 
-# pos_linha = 2
+    f.escrever(chrome, c.dt_inicio_xpath, c.dt_inicio.value + Keys.TAB + c.hr_inicio.value)
+    f.escrever(chrome, c.dt_fim_xpath, c.dt_fim.value + {Keys.TAB} + c.hr_fim.value)
+    f.escrever(chrome, c.dt_presencial_xpath, c.dt_presencial.value + {Keys.TAB} + c.hr_presencial.value)
+    f.escrever(chrome, c.dt_termino_xpath, c.dt_termino.value + {Keys.TAB} + c.hr_termino.value)
 
-# for lote in range(1, lotes + 1):
+    f.clicar(chrome, )
+
+    f.verificar_aprovacao(chrome, c.aprov_automatica_xpath, c.reprov_automatica_xpath, c.aprov_automatica.value)
+
+    f.escrever(chrome, c.preambulo.value)
+    f.escrever(chrome, c.deliberacao.value)
     
-#     if lote == lotes and resto > 0:
-#         for i in range(resto):
-#             status_lote = ws.cell(row=pos_linha, column=2)
-#             status_lote.value = f'lote {lote}'
-#             pos_linha += 1
-#     else:
-#         for i in range(qtd_lote):
-#             status_lote = ws.cell(row=pos_linha, column=2)
-#             status_lote.value = f'lote {lote}'
-#             pos_linha += 1
+    f.clicar(chrome, c.ins_lotes_xpath)
 
-# wb.save(filename=rota_planilha)
+    if lote == lotes and resto > 0:
+        for i in range(resto):
+            try:
+                cnpj = c.conv.cell(row=pos_linha, column=2).value
+                status_lote = c.conv.cell(row=pos_linha, column=3)
+                f.escrever(chrome, c.frmWork_lote_xpath, Keys.TAB * 2 + cnpj + Keys.TAB * 2 + c.dt_presencial.value + Keys.TAB + c.hr_presencial)
+                f.clicar(chrome, c.ins_conv_xpath)
+                f.clicar(chrome, c.conv_ass_xpath)
+                status_lote.value = 'feito'
+                pos_linha += 1
+            except:
+                status_lote = c.conv.cell(row=pos_linha, column=3)
+                status_lote.value = 'erro'
+                c.wb.save(filename=c.rota_planilha)
+                sys.exit()
+    else:
+        for i in range(qtd_lote):
+            try:
+                cnpj = c.conv.cell(row=pos_linha, column=2).value
+                status_lote = c.conv.cell(row=pos_linha, column=3)
+                f.escrever(chrome, c.frmWork_lote_xpath, Keys.TAB * 2 + cnpj + Keys.TAB * 2 + c.dt_presencial.value + Keys.TAB + c.hr_presencial)
+                f.clicar(chrome, c.ins_conv_xpath)
+                f.clicar(chrome, c.conv_ass_xpath)
+                status_lote.value = 'feito'
+                pos_linha += 1
+            except:
+                status_lote = c.conv.cell(row=pos_linha, column=3)
+                status_lote.value = 'erro'
+                c.wb.save(filename=c.rota_planilha)
+                sys.exit()
+
+# ------------------- finalização ------------------------
+c.wb.save(filename=c.rota_planilha)
 
 
 
